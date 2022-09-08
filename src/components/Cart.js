@@ -8,11 +8,18 @@ const Cart = (props) => {
     position: "fixed",
     backgroundColor: "#efefef"
   }
-  const { clickHandler } = props;
+  const { clickHandler, cartItems, removeFromCart } = props;
   return (
     <div style={cartStyle}>
       <h1>My Items</h1>
       <button onClick={clickHandler}>X</button>
+      {cartItems.map((item) => (
+        <div key={item.id}>
+          <div>{item.name}</div>
+          <div>{item.price}</div>
+          <button onClick={()=>removeFromCart(item.id)}>Remove from cart</button>
+        </div>
+      ))}
       <h2>Continue Browsing</h2>
     </div>
   )
