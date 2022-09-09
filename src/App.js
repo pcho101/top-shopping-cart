@@ -6,21 +6,35 @@ import Cart from "./components/Cart";
 import { useState } from "react";
 
 function App() {
-  const [cart, setCart] = useState([
-    {
-      name: 'item1',
-      id: 0,
-      price: 20.00,
-    }
-  ]);
-  const [cartActive, setCardActive] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [cartActive, setCartActive] = useState(false);
 
   const toggleCart = () => {
-    setCardActive(!cartActive);
+    setCartActive(!cartActive);
   }
 
   const addToCart = (newItem) => {
-    setCart([...cart, newItem]);
+    const index = cart.findIndex(item => item.id === newItem.id);
+    if (index > -1) {
+      const newCart = [...cart];
+      newCart[index].quantity = newCart[index].quantity + 1;
+      setCart(newCart);
+    } else {
+      const itemWithQty = newItem;
+      itemWithQty.quantity = 1;
+      setCart([...cart, itemWithQty]);
+    }
+  }
+
+  const decFromCart = (id) => {
+    const index = cart.findIndex(item => item.id === id);
+    if (cart[index].quantity === 1) {
+      setCart(cart.filter((item) => item.id !== id))
+    } else {
+      const newCart = [...cart];
+      newCart[index].quantity = newCart[index].quantity - 1;
+      setCart(newCart);
+    }
   }
 
   const removeFromCart = (id) => {
@@ -30,7 +44,14 @@ function App() {
   return (
     <BrowserRouter>
       <Nav clickHandler={toggleCart} />
-      { cartActive ? <Cart clickHandler={toggleCart} cartItems={cart} removeFromCart={removeFromCart}/> : null }
+      { cartActive
+      ? <Cart
+        clickHandler={toggleCart}
+        cartItems={cart}
+        removeFromCart={removeFromCart}
+        decFromCart={decFromCart}
+      />
+      : null }
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop addToCart={addToCart}/>} />
