@@ -11,7 +11,10 @@ const Nav = (props) => {
     display: "flex",
     gap: "50px"
   }
-  const { clickHandler } = props;
+  const { clickHandler, cartItems } = props;
+  const items = cartItems
+    ? cartItems.map((item) => item.quantity).reduce((prev, cur) => prev + cur, 0)
+    : 0;
   return (
     <nav style={navStyle}>
       <h3>Logo</h3>
@@ -22,7 +25,7 @@ const Nav = (props) => {
         <Link to="/shop">
           <li>Shop</li>
         </Link>
-        <li><button onClick={clickHandler}>Cart</button></li>
+        <li><button onClick={clickHandler}>Cart</button><span>{items}</span></li>
       </ul>
     </nav>
   )

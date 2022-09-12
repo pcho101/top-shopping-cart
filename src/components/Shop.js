@@ -1,10 +1,13 @@
+import { useSearchParams } from "react-router-dom";
+
 const Shop = (props) => {
-  const { addToCart } = props;
+  const { addToCart, currencyFormat } = props;
+  let [searchParams, setSearchParams] = useSearchParams();
   const sampleData = [
     {
       name: 'item1',
       id: 0,
-      price: 20.00,
+      price: 20.50,
     },
     {
       name: 'item2',
@@ -19,7 +22,7 @@ const Shop = (props) => {
     {
       name: 'item4',
       id: 3,
-      price: 7.00,
+      price: 7.50,
     }
   ]
   const itemStyle = {
@@ -31,10 +34,28 @@ const Shop = (props) => {
   return (
     <div>
       <h1>Shop Page</h1>
-      {sampleData.map((item) => (
+      <input
+        value={searchParams.get("filter") || ""}
+        onChange={(event) => {
+          let filter = event.target.value;
+          if (filter) {
+            setSearchParams({ filter });
+          } else {
+            setSearchParams({});
+          }
+        }}
+      />
+      {sampleData
+      .filter((item) => {
+        let filter = searchParams.get("filter");
+        if (!filter) return true;
+        let name = item.name.toLocaleLowerCase();
+        return name.includes(filter.toLocaleLowerCase());
+      })
+      .map((item) => (
         <div key={item.id} style={itemStyle}>
           <div>{item.name}</div>
-          <div>{item.price}</div>
+          <div>{currencyFormat(item.price)}</div>
           <button onClick={()=>addToCart(item)}>Add to cart</button>
         </div>
       ))}

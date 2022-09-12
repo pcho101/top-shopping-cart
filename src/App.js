@@ -41,20 +41,29 @@ function App() {
     setCart(cart.filter((item) => item.id !== id))
   }
 
+  const currencyFormat = (price) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(price)
+  }
+
   return (
     <BrowserRouter>
-      <Nav clickHandler={toggleCart} />
+      <Nav clickHandler={toggleCart} cartItems={cart}/>
       { cartActive
       ? <Cart
         clickHandler={toggleCart}
         cartItems={cart}
         removeFromCart={removeFromCart}
+        addToCart={addToCart}
         decFromCart={decFromCart}
+        currencyFormat={currencyFormat}
       />
       : null }
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop addToCart={addToCart}/>} />
+        <Route path="/shop" element={<Shop addToCart={addToCart} currencyFormat={currencyFormat}/>} />
       </Routes>
     </BrowserRouter>
   );
