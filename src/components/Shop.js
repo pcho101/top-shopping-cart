@@ -1,8 +1,9 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Shop = (props) => {
   const { addToCart, currencyFormat } = props;
   let [searchParams, setSearchParams] = useSearchParams();
+  let navigate = useNavigate();
   const sampleData = [
     {
       name: 'item1',
@@ -53,7 +54,7 @@ const Shop = (props) => {
         return name.includes(filter.toLocaleLowerCase());
       })
       .map((item) => (
-        <div key={item.id} style={itemStyle}>
+        <div key={item.id} style={itemStyle} onClick={() => navigate(`/product/${item.id}`)}>
           <div>{item.name}</div>
           <div>{currencyFormat(item.price)}</div>
           <button onClick={()=>addToCart(item)}>Add to cart</button>

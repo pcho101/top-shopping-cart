@@ -3,6 +3,7 @@ import Nav from "./components/Nav";
 import Home from "./components/Home";
 import Shop from "./components/Shop";
 import Cart from "./components/Cart";
+import Product from "./components/Product";
 import { useState } from "react";
 
 function App() {
@@ -64,6 +65,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop addToCart={addToCart} currencyFormat={currencyFormat}/>} />
+        <Route path="/product/:productId" element={<Product addToCart={addToCart} currencyFormat={currencyFormat} />} />
+        <Route path="*"
+          element={
+            <main style={{ padding: "1rem" }}>
+              <p>Page Not Found</p>
+            </main>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
