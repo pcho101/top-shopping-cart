@@ -4,11 +4,59 @@ import Home from "./components/Home";
 import Shop from "./components/Shop";
 import Cart from "./components/Cart";
 import Product from "./components/Product";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
   const [cart, setCart] = useState([]);
   const [cartActive, setCartActive] = useState(false);
+  const [fetchedData, setFetchedData] = useState(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      // setIsLoading(true);
+      console.log('Sending api request')
+      try {
+        const response = await fetch("https://boardgamegeek.com/xmlapi2/hot?boardgame");
+        console.log('resp', response)
+        const data = await response.text();
+        const xml = new DOMParser().parseFromString(data, 'application/xml');
+        console.log('xml', xml);
+        if (!response.ok) {
+          throw new Error('Failed to fetch.')
+        }
+        setFetchedData(xml);
+        console.log('fetched xml', xml);
+        // setIsLoading(false);
+      }
+      catch(err) {
+        console.log('Error!', err);
+        // setIsLoading(false);
+      }
+    }
+    getData();
+    console.log(fetchedData);
+  }, [])
+
+  let games = null;
+
+  if (fetchedData) {
+    let hotGamesNames = fetchedData.getElementsByTagName("name");
+    let hotGamesThumbs = fetchedData.getElementsByTagName("thumbnail");
+    hotGamesNames = Array.from(hotGamesNames);
+    hotGamesThumbs = Array.from(hotGamesThumbs);
+    const gameName = hotGamesNames.map(element =>
+      ({ name: element.attributes[0].nodeValue }))
+    const gameThumb = hotGamesThumbs.map(element =>
+      ({ thumb: element.attributes[0].nodeValue }))
+    games = [];
+    for (let i = 0; i < hotGamesNames.length; i++) {
+      games.push(
+        { ...gameName[i], ...gameThumb[i] }
+      )
+    }
+    console.log(games);
+  }
+  
 
   const toggleCart = () => {
     setCartActive(!cartActive);
@@ -64,8 +112,15 @@ function App() {
       : null }
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<Shop addToCart={addToCart} currencyFormat={currencyFormat}/>} />
-        <Route path="/product/:productId" element={<Product addToCart={addToCart} currencyFormat={currencyFormat} />} />
+        <Route path="/shop" element={<Shop
+          addToCart={addToCart}
+          currencyFormat={currencyFormat}
+          games={games}/>}
+        />
+        <Route path="/product/:productId" element={<Product
+          addToCart={addToCart}
+          currencyFormat={currencyFormat} />}
+        />
         <Route path="*"
           element={
             <main style={{ padding: "1rem" }}>

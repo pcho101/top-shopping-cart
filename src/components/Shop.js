@@ -1,7 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Shop = (props) => {
-  const { addToCart, currencyFormat } = props;
+  const { addToCart, currencyFormat, games } = props;
   let [searchParams, setSearchParams] = useSearchParams();
   let navigate = useNavigate();
   const sampleData = [
@@ -32,6 +32,16 @@ const Shop = (props) => {
     border: "1px solid grey",
     backgroundColor: "lightblue"
   }
+  const itemStyle2 = {
+    height: "min-content",
+    width: "min-content",
+    border: "1px solid grey",
+    backgroundColor: "lightblue"
+  }
+  const gridStyle = {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, minmax(0, 1fr)"
+  }
   return (
     <div>
       <h1>Shop Page</h1>
@@ -46,6 +56,16 @@ const Shop = (props) => {
           }
         }}
       />
+      <div style={gridStyle}>
+        { games
+        ? games.map((item, index) => (
+          <div key={index} style={itemStyle2}>
+            <h3>{item.name}</h3>
+            <img src={item.thumb}/>
+          </div>
+        ))
+        : null }
+      </div>
       {sampleData
       .filter((item) => {
         let filter = searchParams.get("filter");
