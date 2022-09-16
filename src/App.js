@@ -40,10 +40,14 @@ function App() {
   let games = null;
 
   if (fetchedData) {
+    let hotGamesItems = fetchedData.getElementsByTagName("item");
     let hotGamesNames = fetchedData.getElementsByTagName("name");
     let hotGamesThumbs = fetchedData.getElementsByTagName("thumbnail");
+    hotGamesItems = Array.from(hotGamesItems);
     hotGamesNames = Array.from(hotGamesNames);
     hotGamesThumbs = Array.from(hotGamesThumbs);
+    const gameId = hotGamesItems.map(element =>
+      ({ id: element.id }))
     const gameName = hotGamesNames.map(element =>
       ({ name: element.attributes[0].nodeValue }))
     const gameThumb = hotGamesThumbs.map(element =>
@@ -51,7 +55,7 @@ function App() {
     games = [];
     for (let i = 0; i < hotGamesNames.length; i++) {
       games.push(
-        { ...gameName[i], ...gameThumb[i] }
+        { ...gameId[i], ...gameName[i], ...gameThumb[i] }
       )
     }
     console.log(games);

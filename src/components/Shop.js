@@ -58,8 +58,15 @@ const Shop = (props) => {
       />
       <div style={gridStyle}>
         { games
-        ? games.map((item, index) => (
-          <div key={index} style={itemStyle2}>
+        ? games
+          .filter((item) => {
+            let filter = searchParams.get("filter");
+            if (!filter) return true;
+            let name = item.name.toLocaleLowerCase();
+            return name.includes(filter.toLocaleLowerCase());
+          })
+          .map((item, index) => (
+          <div key={index} style={itemStyle2} onClick={() => navigate(`/product/${item.id}`)}>
             <h3>{item.name}</h3>
             <img src={item.thumb}/>
           </div>
