@@ -37,7 +37,7 @@ function App() {
     console.log(fetchedData);
   }, [])
 
-  let games = null;
+  let hotGames = [];
 
   if (fetchedData) {
     let hotGamesItems = fetchedData.getElementsByTagName("item");
@@ -52,16 +52,14 @@ function App() {
       ({ name: element.attributes[0].nodeValue }))
     const gameThumb = hotGamesThumbs.map(element =>
       ({ thumb: element.attributes[0].nodeValue }))
-    games = [];
     for (let i = 0; i < hotGamesNames.length; i++) {
-      games.push(
+      hotGames.push(
         { ...gameId[i], ...gameName[i], ...gameThumb[i] }
       )
     }
-    console.log(games);
+    console.log(hotGames);
   }
   
-
   const toggleCart = () => {
     setCartActive(!cartActive);
   }
@@ -119,7 +117,7 @@ function App() {
         <Route path="/shop" element={<Shop
           addToCart={addToCart}
           currencyFormat={currencyFormat}
-          games={games}/>}
+          hotGames={hotGames}/>}
         />
         <Route path="/product/:productId" element={<Product
           addToCart={addToCart}
