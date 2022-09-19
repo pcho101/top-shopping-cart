@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useHttp } from "../hooks/http";
 
 const Shop = (props) => {
-  const { addToCart, currencyFormat, hotGames } = props;
-  const [fetchedData, setFetchedData] = useState(null);
+  const { addToCart, currencyFormat, hotGames, hotGamesLoading } = props;
   let [searchParams, setSearchParams] = useSearchParams();
   let navigate = useNavigate();
   let params = useParams();
+  const gameEndPoint = "https://boardgamegeek.com/xmlapi2/search?query=";
+  const searchId = searchParams.get("search") === null ? '' : searchParams.get("search");
+  const [searchLoading, apiData] = useHttp(gameEndPoint + searchId, [params]);
   const sampleData = [
     {
       name: 'item1',
@@ -56,42 +58,17 @@ const Shop = (props) => {
     flexDirection: "column"
   }
 
-  const gameEndPoint = "https://boardgamegeek.com/xmlapi2/search?query=";
-  const searchId = searchParams.get("search") === undefined ? '' : searchParams.get("search");
-
-  useEffect(() => {
-    const getData = async (url) => {
-      console.log('Sending api request')
-      try {
-        const response = await fetch(url);
-        console.log('resp', response)
-        const data = await response.text();
-        const xml = new DOMParser().parseFromString(data, 'application/xml');
-        if (!response.ok) {
-          throw new Error('Failed to fetch.')
-        }
-        setFetchedData(xml);
-        // setIsLoading(false);
-      }
-      catch(err) {
-        console.log('Error!', err);
-        // setIsLoading(false);
-      }  
-    }
-    if (searchId) getData(gameEndPoint + searchId);
-  }, [params])
-
   let searchedGames = [];
   let searchResults = 0;
 
-  if (fetchedData) {
-    searchResults = fetchedData.getElementsByTagName("item").length;
-    const itemLimit = Math.min(fetchedData.getElementsByTagName("item").length, 50)
+  if (apiData) {
+    searchResults = apiData.getElementsByTagName("item").length;
+    const itemLimit = Math.min(apiData.getElementsByTagName("item").length, 50)
     for (let i = 0; i < itemLimit; i++) {
       searchedGames[i] = {
-        name: fetchedData.getElementsByTagName("name")[i].getAttribute("value"),
-        type: fetchedData.getElementsByTagName("item")[i].getAttribute("type"),
-        id: fetchedData.getElementsByTagName("item")[i].getAttribute("id")
+        name: apiData.getElementsByTagName("name")[i].getAttribute("value"),
+        type: apiData.getElementsByTagName("item")[i].getAttribute("type"),
+        id: apiData.getElementsByTagName("item")[i].getAttribute("id")
       }
     }
     console.log('searchedGames', searchedGames);
@@ -150,7 +127,9 @@ const Shop = (props) => {
           }
         }}
       />
-      {gameList}
+      { hotGamesLoading || searchLoading
+      ? hotGamesLoading ? <h1>Loading games...</h1> : <h1>Loading search results...</h1> 
+      : gameList}
       {sampleData
       .filter((item) => {
         let filter = searchParams.get("filter");
