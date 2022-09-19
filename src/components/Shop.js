@@ -2,35 +2,25 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useHttp } from "../hooks/http";
 
 const Shop = (props) => {
-  const { addToCart, currencyFormat, hotGames, hotGamesLoading } = props;
+  const { addToCart, hotGames, hotGamesLoading } = props;
   let [searchParams, setSearchParams] = useSearchParams();
   let navigate = useNavigate();
   let params = useParams();
   const gameEndPoint = "https://boardgamegeek.com/xmlapi2/search?query=";
   const searchId = searchParams.get("search") === null ? '' : searchParams.get("search");
   const [searchLoading, apiData] = useHttp(gameEndPoint + searchId, [params]);
-  const sampleData = [
-    {
-      name: 'item1',
-      id: 0,
-      price: 20.50,
-    },
-    {
-      name: 'item2',
-      id: 1,
-      price: 25.00,
-    },
-    {
-      name: 'item3',
-      id: 2,
-      price: 5.00,
-    },
-    {
-      name: 'item4',
-      id: 3,
-      price: 7.50,
-    }
-  ]
+
+  const priceById = (id) => {
+    return Math.max(Math.round(Number(id) / 100), 1000) / 100;
+  }
+
+  const currencyFormat = (price) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(price)
+  }
+
   const itemStyle = {
     height: "25vh",
     width: "20vh",
@@ -68,7 +58,8 @@ const Shop = (props) => {
       searchedGames[i] = {
         name: apiData.getElementsByTagName("name")[i].getAttribute("value"),
         type: apiData.getElementsByTagName("item")[i].getAttribute("type"),
-        id: apiData.getElementsByTagName("item")[i].getAttribute("id")
+        id: apiData.getElementsByTagName("item")[i].getAttribute("id"),
+        price: priceById(apiData.getElementsByTagName("item")[i].getAttribute("id"))
       }
     }
     console.log('searchedGames', searchedGames);
@@ -107,6 +98,14 @@ const Shop = (props) => {
         <div key={index} style={itemStyle2} onClick={() => navigate(`/product/${item.id}`)}>
           <h3>{item.name}</h3>
           <img src={item.thumb}/>
+          <h3>{currencyFormat(item.price)}</h3>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart(item);
+            }}>
+            Add to cart
+          </button>
         </div>
       ))
       : null }
@@ -130,20 +129,6 @@ const Shop = (props) => {
       { hotGamesLoading || searchLoading
       ? hotGamesLoading ? <h1>Loading games...</h1> : <h1>Loading search results...</h1> 
       : gameList}
-      {sampleData
-      .filter((item) => {
-        let filter = searchParams.get("filter");
-        if (!filter) return true;
-        let name = item.name.toLocaleLowerCase();
-        return name.includes(filter.toLocaleLowerCase());
-      })
-      .map((item) => (
-        <div key={item.id} style={itemStyle} onClick={() => navigate(`/product/${item.id}`)}>
-          <div>{item.name}</div>
-          <div>{currencyFormat(item.price)}</div>
-          <button onClick={()=>addToCart(item)}>Add to cart</button>
-        </div>
-      ))}
     </div>
   )
 }

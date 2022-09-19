@@ -12,6 +12,10 @@ function App() {
   const [cartActive, setCartActive] = useState(false);
   const [hotGamesLoading, apiData] = useHttp("https://boardgamegeek.com/xmlapi2/hot?boardgame", []);
 
+  const priceById = (id) => {
+    return Math.max(Math.round(Number(id) / 100), 1000) / 100;
+  }
+
   let hotGames = [];
 
   if (apiData) {
@@ -21,12 +25,16 @@ function App() {
     hotGamesItems = Array.from(hotGamesItems);
     hotGamesNames = Array.from(hotGamesNames);
     hotGamesThumbs = Array.from(hotGamesThumbs);
-    const gameId = hotGamesItems.map(element =>
-      ({ id: element.id }))
-    const gameName = hotGamesNames.map(element =>
-      ({ name: element.attributes[0].nodeValue }))
-    const gameThumb = hotGamesThumbs.map(element =>
-      ({ thumb: element.attributes[0].nodeValue }))
+    const gameId = hotGamesItems.map(element => ({
+      id: element.id,
+      price: priceById(element.id)
+    }))
+    const gameName = hotGamesNames.map(element => ({
+      name: element.attributes[0].nodeValue
+    }))
+    const gameThumb = hotGamesThumbs.map(element => ({
+      thumb: element.attributes[0].nodeValue
+    }))
     for (let i = 0; i < hotGamesNames.length; i++) {
       hotGames.push(
         { ...gameId[i], ...gameName[i], ...gameThumb[i] }
@@ -67,13 +75,6 @@ function App() {
     setCart(cart.filter((item) => item.id !== id))
   }
 
-  const currencyFormat = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price)
-  }
-
   return (
     <BrowserRouter>
       <Nav clickHandler={toggleCart} cartItems={cart}/>
@@ -84,20 +85,17 @@ function App() {
         removeFromCart={removeFromCart}
         addToCart={addToCart}
         decFromCart={decFromCart}
-        currencyFormat={currencyFormat}
       />
       : null }
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop
           addToCart={addToCart}
-          currencyFormat={currencyFormat}
           hotGames={hotGames}
           hotGamesLoading={hotGamesLoading}/>}
         />
         <Route path="/product/:productId" element={<Product
-          addToCart={addToCart}
-          currencyFormat={currencyFormat} />}
+          addToCart={addToCart} />}
         />
         <Route path="*"
           element={
