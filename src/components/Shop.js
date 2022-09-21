@@ -1,14 +1,15 @@
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useHttp } from "../hooks/http";
 
 const Shop = (props) => {
   const { addToCart, hotGames, hotGamesLoading } = props;
-  let [searchParams, setSearchParams] = useSearchParams();
-  let navigate = useNavigate();
-  let params = useParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const gameEndPoint = "https://boardgamegeek.com/xmlapi2/search?query=";
   const searchId = searchParams.get("search") === null ? '' : searchParams.get("search");
-  const [searchLoading, apiData] = useHttp(gameEndPoint + searchId, [params]);
+  const [searchLoading, apiData] = useHttp(gameEndPoint + searchId, [searchParams.get("search")]);
+  const [filterValue, setFilterValue] = useState('');
 
   const priceById = (id) => {
     return Math.max(Math.round(Number(id) / 100), 1000) / 100;
@@ -50,6 +51,7 @@ const Shop = (props) => {
 
   let searchedGames = [];
   let searchResults = 0;
+  console.log('shop re-renders')
 
   if (apiData) {
     searchResults = apiData.getElementsByTagName("item").length;
@@ -73,6 +75,11 @@ const Shop = (props) => {
       </div>
       { searchedGames.length > 0
       ? searchedGames
+        .filter((item) => {
+          if (!filterValue) return true;
+          let name = item.name.toLocaleLowerCase();
+          return name.includes(filterValue.toLocaleLowerCase());
+        })
         .map((item, index) => (
         <div key={index} style={itemStyle3} onClick={() => navigate(`/product/${item.id}`)}>
           <h3>{item.name}</h3>
@@ -89,10 +96,9 @@ const Shop = (props) => {
       { hotGames
       ? hotGames
         .filter((item) => {
-          let filter = searchParams.get("filter");
-          if (!filter) return true;
+          if (!filterValue) return true;
           let name = item.name.toLocaleLowerCase();
-          return name.includes(filter.toLocaleLowerCase());
+          return name.includes(filterValue.toLocaleLowerCase());
         })
         .map((item, index) => (
         <div key={index} style={itemStyle2} onClick={() => navigate(`/product/${item.id}`)}>
@@ -116,17 +122,10 @@ const Shop = (props) => {
     <div>
       <h1>Shop Page</h1>
       <input
-        value={searchParams.get("filter") || ""}
-        onChange={(event) => {
-          let filter = event.target.value;
-          if (filter) {
-            setSearchParams({ filter });
-          } else {
-            setSearchParams({});
-          }
-        }}
+        value={filterValue}
+        onChange={(e) => setFilterValue(e.target.value)}
       />
-      { hotGamesLoading || searchLoading
+      { hotGamesLoading || (searchLoading && searchParams.get("search"))
       ? hotGamesLoading ? <h1>Loading games...</h1> : <h1>Loading search results...</h1> 
       : gameList}
     </div>

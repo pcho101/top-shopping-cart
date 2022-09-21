@@ -24,6 +24,7 @@ const Product = (props) => {
   }
 
   let game = null;
+  console.log('product re-renders');
   
   if (apiData) {
     console.log(apiData);
