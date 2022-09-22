@@ -6,7 +6,7 @@ const Product = (props) => {
   const params = useParams();
   const gameEndPoint = "https://boardgamegeek.com/xmlapi2/thing?id=";
   const itemId = parseInt(params.productId, 10);
-  const [productLoading, apiData] = useHttp(gameEndPoint + itemId, []);
+  const [productLoading, apiData] = useHttp(gameEndPoint + itemId, [params.productId]);
   
   const priceById = (id) => {
     return Math.max(Math.round(Number(id) / 100), 1000) / 100;

@@ -88,7 +88,7 @@ function App() {
       />
       : null }
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home hotGames={hotGames}/>} />
         <Route path="/shop" element={<Shop
           addToCart={addToCart}
           hotGames={hotGames}

@@ -1,11 +1,16 @@
+import { useNavigate } from "react-router-dom";
+
 const Cart = (props) => {
+  const navigate = useNavigate();
   const { clickHandler, cartItems, removeFromCart, addToCart, decFromCart } = props;
+
   const currencyFormat = (price) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
     }).format(price)
   }
+
   const cartStyle = {
     height: "100vh",
     width: "40vw",
@@ -15,12 +20,15 @@ const Cart = (props) => {
     position: "fixed",
     backgroundColor: "#efefef"
   }
+
   const items = cartItems
     ? cartItems.map((item) => item.quantity).reduce((prev, cur) => prev + cur, 0)
     : 0;
+  
   const subtotal = cartItems
     ? cartItems.map((item) => item.price*item.quantity).reduce((prev, cur) => prev + cur, 0)
     : 0;
+
   return (
     <div style={cartStyle}>
       <h1>My Items</h1>
@@ -30,7 +38,7 @@ const Cart = (props) => {
           <div key={item.id}>
             <div style={{ display: "flex" }}>
               <div>
-                <img src={item.thumb}/>
+                <img src={item.thumb} onClick={() => navigate(`/product/${item.id}`)}/>
               </div>
               <div>
                 <div>Quantity: {item.quantity}</div>
