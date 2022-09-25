@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useHttp } from "../hooks/http";
-import "../styles/App.css";
 
 const Home = (props) => {
   const { hotGames } = props;
@@ -16,18 +15,25 @@ const Home = (props) => {
   console.log('render home');
   const gameIds = getMultipleRandom(hotGames, 3).map((item) => item.id).join(',');
 
-  const [gameLoading, apiData] = useHttp(gameEndPoint + gameIds, []);
+  const [gameLoading, apiData] = useHttp(gameEndPoint + gameIds, [hotGames]);
   const [radioIndex, setRadioIndex] = useState(0);
+  const [isActive, setIsActive] = useState(true);
+
+  const toggleActive = () => {
+    setIsActive(!isActive);
+  }
 
   useEffect(() => {
     let interval = null;
-    interval = setInterval(() => {
-      console.log('radio inc', radioIndex);
-      if (radioIndex === 2) setRadioIndex(0)
-      else setRadioIndex(radioIndex => radioIndex + 1);
-    }, 5000);
+    if (isActive) {
+      interval = setInterval(() => {
+        console.log('radio inc', radioIndex);
+        if (radioIndex === 2) setRadioIndex(0)
+        else setRadioIndex(radioIndex => radioIndex + 1);
+      }, 5000);
+    }
     return () => clearInterval(interval);
-  }, [radioIndex])
+  }, [isActive, radioIndex])
 
   let games = [];
 
@@ -50,8 +56,11 @@ const Home = (props) => {
   }
 
   return (
-    <div>
-      <h1>Home Page</h1>
+    <div className="home">
+      <h1>Featured Games</h1>
+      <button onClick={() => toggleActive()}>
+        { isActive ? "PAUSE" : "PLAY" }
+      </button>
       <div className="container">
         <input type="radio" name="slider" id="item-1" checked={radioIndex === 0}/>
         <input type="radio" name="slider" id="item-2" checked={radioIndex === 1}/>
@@ -62,10 +71,10 @@ const Home = (props) => {
             <img src={games[0].image} onClick={() => navigate(`/product/${games[0].id}`)} alt="game-1"></img>
           </label>
           <label className="card" htmlFor="item-2" id="game-2">
-            <img src={games[1].image} onClick={() => navigate(`/product/${games[0].id}`)} alt="game-2"></img>
+            <img src={games[1].image} onClick={() => navigate(`/product/${games[1].id}`)} alt="game-2"></img>
           </label>
           <label className="card" htmlFor="item-3" id="game-3">
-            <img src={games[2].image} onClick={() => navigate(`/product/${games[0].id}`)} alt="game-3"></img>
+            <img src={games[2].image} onClick={() => navigate(`/product/${games[2].id}`)} alt="game-3"></img>
           </label>
         </div>
         }

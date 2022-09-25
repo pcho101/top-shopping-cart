@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -22,7 +22,7 @@ const Search = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input type="text" name="search" onChange={handleChange}/>
+      <input type="text" name="search" onChange={handleChange} placeholder="Search..."/>
       <button type="submit">S</button>
     </form>
   )

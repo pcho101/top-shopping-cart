@@ -22,33 +22,6 @@ const Shop = (props) => {
     }).format(price)
   }
 
-  const itemStyle = {
-    height: "25vh",
-    width: "20vh",
-    border: "1px solid grey",
-    backgroundColor: "lightblue"
-  }
-  const itemStyle2 = {
-    height: "min-content",
-    width: "min-content",
-    border: "1px solid grey",
-    backgroundColor: "lightblue"
-  }
-  const itemStyle3 = {
-    height: "min-content",
-    width: "90vw",
-    border: "1px solid grey",
-    backgroundColor: "lightblue"
-  }
-  const gridStyle = {
-    display: "grid",
-    gridTemplateColumns: "repeat(3, minmax(0, 1fr)"
-  }
-  const gridStyle2 = {
-    display: "flex",
-    flexDirection: "column"
-  }
-
   let searchedGames = [];
   let searchResults = 0;
   console.log('shop re-renders')
@@ -69,8 +42,8 @@ const Shop = (props) => {
 
   const gameList = (
     searchParams.get("search")
-    ? <div style={gridStyle2}>
-      <div>
+    ? <div className="searchedgames">
+      <div className="searchresult">
         Search Results: {searchResults}
       </div>
       { searchedGames.length > 0
@@ -81,7 +54,7 @@ const Shop = (props) => {
           return name.includes(filterValue.toLocaleLowerCase());
         })
         .map((item, index) => (
-        <div key={index} style={itemStyle3} onClick={() => navigate(`/product/${item.id}`)}>
+        <div key={index} className="searchedgamesitem" onClick={() => navigate(`/product/${item.id}`)}>
           <h3>{item.name}</h3>
           <div>{item.type}</div>
         </div>
@@ -92,7 +65,7 @@ const Shop = (props) => {
         </div>
       }
     </div>
-    : <div style={gridStyle}>
+    : <div className="hotgames">
       { hotGames
       ? hotGames
         .filter((item) => {
@@ -101,10 +74,10 @@ const Shop = (props) => {
           return name.includes(filterValue.toLocaleLowerCase());
         })
         .map((item, index) => (
-        <div key={index} style={itemStyle2} onClick={() => navigate(`/product/${item.id}`)}>
-          <h3>{item.name}</h3>
+        <div key={index} className="hotgamesitem" onClick={() => navigate(`/product/${item.id}`)}>
           <img src={item.thumb}/>
-          <h3>{currencyFormat(item.price)}</h3>
+          <h3>{item.name}</h3>
+          <h4>{currencyFormat(item.price)}</h4>
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -119,11 +92,12 @@ const Shop = (props) => {
   )
 
   return (
-    <div>
+    <div className="shop">
       <h1>Shop Page</h1>
       <input
         value={filterValue}
         onChange={(e) => setFilterValue(e.target.value)}
+        placeholder="Filter Items"
       />
       { hotGamesLoading || (searchLoading && searchParams.get("search"))
       ? hotGamesLoading ? <h1>Loading games...</h1> : <h1>Loading search results...</h1> 

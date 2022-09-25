@@ -1,3 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;1,700&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: Lato, 'Lucida Grande', Arial, Helvetica, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eaeaea;
+  padding: 0px 1rem;
+}
+
+.navitem {
+  display: flex;
+  gap: 50px;
+}
+
+
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
 input[type=radio] {
   display: none;
 }
@@ -5,6 +44,7 @@ input[type=radio] {
 .card {
   position: absolute;
   width: 60%;
+  height: 100%;
   left: 0;
   right: 0;
   margin: auto;
@@ -14,8 +54,8 @@ input[type=radio] {
 
 .container {
   width: 100%;
-  max-width: 800px;
-  max-height: 600px;
+  max-width: 64rem;
+  max-height: 32rem;
   height: 100%;
   transform-style: preserve-3d;
   display: flex;
@@ -29,14 +69,14 @@ input[type=radio] {
   width: 100%;
   height: 100%;
   margin-bottom: 20px;
-  text-align: center;
 }
 
-img {
-  width: 300px;
-  height: 300px;
+.card img {
+  width: 100%;
+  height: 100%;
   border-radius: 10px;
-  object-fit: cover;
+  object-fit: fill;
+  border: 1px solid grey;
 }
 
 #item-1:checked ~ .cards #game-3,
@@ -63,8 +103,59 @@ img {
   z-index: 1;
 }
 
-#item-1:checked ~ .cards #game-1 img,
+
+.shop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hotgames {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  width: 100%;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.hotgamesitem {
+  height: min-content;
+  border: 1px solid grey;
+  border-radius: 0.3rem;
+  background-color: #dee8eb;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.hotgamesitem img {
+  height: 150px;
+  max-width: 220px;
+}
+
+.searchedgames {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchedgamesitem {
+  height: min-content;
+  width: 90vw;
+  border: 1px solid grey;
+  background-color: #dee8eb;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.searchresult {
+  margin: 1rem 0rem;
+}
+
+
+
+/* #item-1:checked ~ .cards #game-1 img,
 #item-2:checked ~ .cards #game-2 img,
 #item-3:checked ~ .cards #game-3 img {
   box-shadow: 0px 0px 5px 0px rgba(81, 81, 81, 0.47);
-}
+} */
+

@@ -6,6 +6,7 @@ import Cart from "./components/Cart";
 import Product from "./components/Product";
 import { useState } from "react";
 import { useHttp } from "./hooks/http";
+import "./styles/App.css";
 
 function App() {
   const [cart, setCart] = useState([]);
