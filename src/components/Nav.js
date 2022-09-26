@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Search from "./Search";
 
 const Nav = (props) => {
   const { clickHandler, cartItems } = props;
+  const location = useLocation();
 
   const items = cartItems
     ? cartItems.map((item) => item.quantity).reduce((prev, cur) => prev + cur, 0)
@@ -13,13 +14,16 @@ const Nav = (props) => {
       <h3>Logo</h3>
       <Search />
       <ul className="navitem">
-        <Link to="/">
+        <Link to="/" className={location.pathname === '/' ? "active" : null}>
           <li>Home</li>
         </Link>
-        <Link to="/shop">
+        <Link to="/shop" className={location.pathname === '/shop' ? "active" : null}>
           <li>Shop</li>
         </Link>
-        <li><button onClick={clickHandler}>Cart</button><span>{items}</span></li>
+        <li onClick={clickHandler} className="cart-nav">
+          Cart 
+          <span className="cart-count">{items}</span>
+        </li>
       </ul>
     </nav>
   )

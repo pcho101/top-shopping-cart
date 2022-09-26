@@ -41,19 +41,19 @@ const Product = (props) => {
   const productPage = (
     game
     ? (
-      <div>
+      <div className="product-info">
         <h1>{game.name}</h1>
-        <img src={game.image} style={{ width: "80vh", height: "50vh" }}/>
+        <img src={game.image}/>
         <h2>{currencyFormat(game.price)}</h2>
         <button onClick={()=>addToCart(game)}>Add to cart</button>
-        <h3 dangerouslySetInnerHTML={markup(game.desc)}></h3>
+        <p dangerouslySetInnerHTML={markup(game.desc)}></p>
       </div>
     )
     : null
   )
 
   return (
-    <div>
+    <div className="product">
       { productLoading
       ? <h1>Product loading...</h1>
       : productPage}

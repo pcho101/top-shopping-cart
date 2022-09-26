@@ -14,6 +14,66 @@ body {
   min-height: 100vh;
 }
 
+input[type="text"] {
+  padding: 6px 12px;
+  border: 1px solid grey;
+}
+
+a {
+  text-decoration: none;
+}
+
+li,
+li button {
+  font-size: 13px;
+  letter-spacing: 2px;
+  line-height: 24px;
+  text-transform: uppercase;
+  color: #333333;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 48px;
+  text-transform: none;
+  color: #333333;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 12px;
+  color: #333333;
+}
+
+h4 {
+  font-size: 16px;
+  font-weight: bold;
+  font-style: italic;
+  line-height: 12px;
+  color: #333333;
+}
+
+
+
+button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: white;
+  background-color: #555555;
+  border: 1px solid #555555;
+}
+
+button:hover {
+  color: #333333;
+  background-color: white;
+}
+
 
 nav {
   display: flex;
@@ -21,11 +81,48 @@ nav {
   align-items: center;
   background-color: #eaeaea;
   padding: 0px 1rem;
+  flex-flow: wrap;
+}
+
+form {
+  display: flex;
+  gap: 3px;
 }
 
 .navitem {
   display: flex;
   gap: 50px;
+}
+
+.active {
+  font-weight: bold;
+}
+
+li {
+  list-style: none;
+}
+
+ul li {
+  cursor: pointer;
+}
+
+.cart-nav {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.cart-count {
+  color: white;
+  background-color: #555555;
+  display: flex;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  font-size: 10px;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -62,6 +159,7 @@ input[type=radio] {
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .cards {
@@ -101,6 +199,12 @@ input[type=radio] {
   transform: translateX(0) scale(1);
   opacity: 1;
   z-index: 1;
+}
+
+.btn-animate {
+  position: absolute;
+  z-index: 1;
+  bottom: 2.5rem;
 }
 
 
@@ -153,9 +257,141 @@ input[type=radio] {
 
 
 
-/* #item-1:checked ~ .cards #game-1 img,
-#item-2:checked ~ .cards #game-2 img,
-#item-3:checked ~ .cards #game-3 img {
-  box-shadow: 0px 0px 5px 0px rgba(81, 81, 81, 0.47);
-} */
+.cart {
+  height: 100vh;
+  width: 360px;
+  border: 1px solid black;
+  right: 0;
+  top: 0;
+  position: fixed;
+  background-color: #efefef;
+  padding: 0.5rem 1rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.5rem;
+}
+
+.cart-main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+  height: 100%;
+}
+
+.cart-item {
+  display: flex;
+  gap: 8px;
+  border-top: 2px solid #a8a8a8;
+}
+
+.cart-img {
+  width: 30%;
+}
+
+.cart-info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.cart-info-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart-info-main {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart-info-qty {
+  display: flex;
+}
+
+.cart-item-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.cart-item-unit-price {
+  font-size: 14px;
+  line-height: 12px;
+}
+
+.cart-item-price {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.item-qty {
+  width: 24px;
+  text-align: center;
+}
+
+.cart-img img {
+  width: 100%;
+  cursor: pointer;
+}
+
+.cart-info-header button,
+.cart-info-qty button {
+  padding: 0.15rem 0.5rem;
+  max-height: 22px;
+}
+
+.cart-footer {
+  border-top: 1px solid grey;
+}
+
+.cart-footer h5,
+.cart-footer h6 {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 100;
+  font-size: 18px;
+  margin: 0px;
+}
+
+h5 span,
+h6 span {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+h6 {
+  border-top: 1px solid grey;
+}
+
+.checkout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+
+.product {
+  padding: 0rem 1rem;
+}
+
+.product-info img {
+  height: 60vh;
+}
+
+@media only screen and (max-width: 767px) {
+  .container {
+    max-width: 24rem;
+    max-height: 16rem;
+  }
+}

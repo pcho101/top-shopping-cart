@@ -58,13 +58,10 @@ const Home = (props) => {
   return (
     <div className="home">
       <h1>Featured Games</h1>
-      <button onClick={() => toggleActive()}>
-        { isActive ? "PAUSE" : "PLAY" }
-      </button>
       <div className="container">
-        <input type="radio" name="slider" id="item-1" checked={radioIndex === 0}/>
-        <input type="radio" name="slider" id="item-2" checked={radioIndex === 1}/>
-        <input type="radio" name="slider" id="item-3" checked={radioIndex === 2}/>
+        <input type="radio" name="slider" id="item-1" checked={radioIndex === 0} readOnly/>
+        <input type="radio" name="slider" id="item-2" checked={radioIndex === 1} readOnly/>
+        <input type="radio" name="slider" id="item-3" checked={radioIndex === 2} readOnly/>
         { games.length > 0 && 
         <div className="cards">
           <label className="card" htmlFor="item-1" id="game-1">
@@ -78,6 +75,9 @@ const Home = (props) => {
           </label>
         </div>
         }
+        <button className="btn-animate" onClick={() => toggleActive()}>
+          { isActive ? "PAUSE" : "PLAY" }
+        </button>
       </div>
       
     </div>

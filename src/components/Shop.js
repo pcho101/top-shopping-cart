@@ -93,8 +93,9 @@ const Shop = (props) => {
 
   return (
     <div className="shop">
-      <h1>Shop Page</h1>
+      <h1>Collection</h1>
       <input
+        type="text"
         value={filterValue}
         onChange={(e) => setFilterValue(e.target.value)}
         placeholder="Filter Items"

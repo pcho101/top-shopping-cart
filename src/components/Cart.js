@@ -2,23 +2,13 @@ import { useNavigate } from "react-router-dom";
 
 const Cart = (props) => {
   const navigate = useNavigate();
-  const { clickHandler, cartItems, removeFromCart, addToCart, decFromCart } = props;
+  const { clickHandler, cartItems, removeFromCart, addToCart, decFromCart, toggleCart } = props;
 
   const currencyFormat = (price) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
     }).format(price)
-  }
-
-  const cartStyle = {
-    height: "100vh",
-    width: "40vw",
-    border: "2px solid black",
-    right: "0",
-    top: "0",
-    position: "fixed",
-    backgroundColor: "#efefef"
   }
 
   const items = cartItems
@@ -30,32 +20,56 @@ const Cart = (props) => {
     : 0;
 
   return (
-    <div style={cartStyle}>
-      <h1>My Items</h1>
-      <button onClick={clickHandler}>X</button>
-      <div style={{ height: "100%" }}>
+    <div className="cart">
+      <div className="cart-header">
+        <h1>My Items ({items})</h1>
+        <button onClick={clickHandler}>X</button>
+      </div>
+      <div className="cart-main">
+        {items === 0
+        ? <button onClick={() => {
+          toggleCart();
+          navigate(`/shop`)
+        }}>Browse Shop</button>
+        : null}
         {cartItems.map((item) => (
-          <div key={item.id}>
-            <div style={{ display: "flex" }}>
-              <div>
-                <img src={item.thumb} onClick={() => navigate(`/product/${item.id}`)}/>
+          <div key={item.id} className="cart-item">
+            <div className="cart-img">
+              <img src={item.thumb} onClick={() => navigate(`/product/${item.id}`)}/>
+            </div>
+            <div className="cart-info">
+              <div className="cart-info-header">
+                <div className="cart-item-name">{item.name}</div>
+                <button onClick={()=>removeFromCart(item.id)}>X</button>
               </div>
-              <div>
-                <div>Quantity: {item.quantity}</div>
-                <div>Name: {item.name}</div>
-                <div>Price/unit: {currencyFormat(item.price)}</div>
-                <div>Total: {currencyFormat(item.quantity*item.price)}</div>
+              <div className="cart-item-unit-price">{currencyFormat(item.price)}</div>
+              <div className="cart-info-main">
+                <div className="cart-info-qty">
+                  <button onClick={()=>decFromCart(item.id)}>-</button>
+                  <div className="item-qty">{item.quantity}</div>
+                  <button onClick={()=>addToCart(item)}>+</button>
+                </div>
+                <div className="cart-item-price">{currencyFormat(item.quantity*item.price)}</div>
               </div>
             </div>
-            <button onClick={()=>addToCart(item)}>+</button>
-            <button onClick={()=>decFromCart(item.id)}>-</button>
-            <button onClick={()=>removeFromCart(item.id)}>Remove from cart</button>
           </div>
         ))}
       </div>
-      <h2>Items:{items}</h2>
-      <h2>Subtotal:{currencyFormat(subtotal)}</h2>
-      <h2>Continue Browsing</h2>
+      <div className="cart-footer">
+        <h5>Subtotal
+          <span>{currencyFormat(subtotal)}</span>
+        </h5>
+        <h5>Taxes
+          <span>{currencyFormat(0)}</span>
+        </h5>
+        <h6>Total
+          <span>{currencyFormat(subtotal)}</span>
+        </h6>
+        <div className="checkout">
+          <button>Checkout</button>
+        </div>
+      </div>
+      
     </div>
   )
 }

@@ -86,6 +86,7 @@ function App() {
         removeFromCart={removeFromCart}
         addToCart={addToCart}
         decFromCart={decFromCart}
+        toggleCart={toggleCart}
       />
       : null }
       <Routes>
