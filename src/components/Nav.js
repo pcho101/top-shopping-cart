@@ -22,7 +22,7 @@ const Nav = (props) => {
         </Link>
         <li onClick={clickHandler} className="cart-nav">
           Cart 
-          <span className="cart-count">{items}</span>
+          <span data-testid="cart-count" className="cart-count">{items}</span>
         </li>
       </ul>
     </nav>

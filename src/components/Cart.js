@@ -33,7 +33,7 @@ const Cart = (props) => {
         }}>Browse Shop</button>
         : null}
         {cartItems.map((item) => (
-          <div key={item.id} className="cart-item">
+          <div key={item.id} data-testid="cart-item" className="cart-item">
             <div className="cart-img">
               <img src={item.thumb} onClick={() => navigate(`/product/${item.id}`)}/>
             </div>
@@ -57,13 +57,13 @@ const Cart = (props) => {
       </div>
       <div className="cart-footer">
         <h5>Subtotal
-          <span>{currencyFormat(subtotal)}</span>
+          <span data-testid="subtotal">{currencyFormat(subtotal)}</span>
         </h5>
         <h5>Taxes
-          <span>{currencyFormat(0)}</span>
+          <span data-testid="taxes">{currencyFormat(0)}</span>
         </h5>
         <h6>Total
-          <span>{currencyFormat(subtotal)}</span>
+          <span data-testid="total">{currencyFormat(subtotal)}</span>
         </h6>
         <div className="checkout">
           <button>Checkout</button>
