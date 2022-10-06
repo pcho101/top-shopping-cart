@@ -33,14 +33,16 @@ describe("Shop component", () => {
     expect(screen.getByRole("textbox")).toBeInTheDocument();
   });
 
-  it("input has correct values", () => {
+  it("input has correct values", async () => {
     render(
       <BrowserRouter>
         <Shop />
       </BrowserRouter>
     );
+    const user = userEvent.setup();
     const input = screen.getByRole("textbox");
-    userEvent.type(input, 'ab');
+
+    await user.type(input, 'ab');
 
     expect(input).toHaveValue('ab');
   });

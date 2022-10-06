@@ -15,16 +15,19 @@ describe("Home component", () => {
     expect(screen.getByRole("heading")).toBeInTheDocument();
   });
 
-  it("can click button to switch between play and pause", () => {
+  it("can click button to switch between play and pause", async () => {
     render(
       <BrowserRouter>
         <Home hotGames={[]}/>
       </BrowserRouter>
     );
+    const user = userEvent.setup();
     const button = screen.getByRole("button");
 
     expect(button.textContent).toMatch(/pause/i);
-    userEvent.click(button);
+
+    await user.click(button);
+
     expect(button.textContent).toMatch(/play/i);
   });
 
@@ -34,7 +37,6 @@ describe("Home component", () => {
         <Home hotGames={[]}/>
       </BrowserRouter>
     );
-
     expect(screen.queryByRole("img")).not.toBeInTheDocument();
   });
 })
