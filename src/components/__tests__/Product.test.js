@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import Product from "../Product";
+import Product from "../../pages/Product";
 import { BrowserRouter } from "react-router-dom";
 import '@testing-library/jest-dom';
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useHttp } from "../hooks/http";
+import parseApiData from "../helpers/parseApiData";
 
 const Shop = (props) => {
   const { addToCart, hotGames, hotGamesLoading } = props;
@@ -11,10 +12,6 @@ const Shop = (props) => {
   const [searchLoading, apiData] = useHttp(gameEndPoint + searchId, [searchParams.get("search")]);
   const [filterValue, setFilterValue] = useState('');
 
-  const priceById = (id) => {
-    return Math.max(Math.round(Number(id) / 100), 1000) / 100;
-  }
-
   const currencyFormat = (price) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -22,23 +19,11 @@ const Shop = (props) => {
     }).format(price)
   }
 
-  let searchedGames = [];
-  let searchResults = 0;
-  console.log('shop re-renders')
+  let searchedGames;
+  let searchResults;
 
-  if (apiData) {
-    searchResults = apiData.getElementsByTagName("item").length;
-    const itemLimit = Math.min(apiData.getElementsByTagName("item").length, 50)
-    for (let i = 0; i < itemLimit; i++) {
-      searchedGames[i] = {
-        name: apiData.getElementsByTagName("name")[i].getAttribute("value"),
-        type: apiData.getElementsByTagName("item")[i].getAttribute("type"),
-        id: apiData.getElementsByTagName("item")[i].getAttribute("id"),
-        price: priceById(apiData.getElementsByTagName("item")[i].getAttribute("id"))
-      }
-    }
-    console.log('searchedGames', searchedGames);
-  }
+  [ searchedGames, searchResults ] = parseApiData(apiData, "search");
+  console.log('shop re-renders')
 
   const gameList = (
     searchParams.get("search")

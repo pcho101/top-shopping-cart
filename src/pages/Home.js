@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useHttp } from "../hooks/http";
+import parseApiData from "../helpers/parseApiData";
 
 const Home = (props) => {
   const { hotGames } = props;
@@ -8,6 +9,7 @@ const Home = (props) => {
   const gameEndPoint = "https://boardgamegeek.com/xmlapi2/thing?id=";
   
   const getMultipleRandom = (arr, num) => {
+    if(arr === undefined) return [];
     const shuffled = [...arr].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, num);
   }
@@ -35,25 +37,7 @@ const Home = (props) => {
     return () => clearInterval(interval);
   }, [isActive, radioIndex])
 
-  let games = [];
-
-  if (apiData) {
-    console.log(apiData);
-    const numberOfItems = apiData.getElementsByTagName("item").length;
-    const gameItems = apiData.getElementsByTagName("item").length > 0
-      ? apiData.getElementsByTagName("item")
-      : null
-    const gameImages = apiData.getElementsByTagName("image").length > 0
-      ? apiData.getElementsByTagName("image")
-      : null
-    for (let i = 0; i < numberOfItems; i++) {
-      games[i] = {
-        id: gameItems[i].getAttribute("id"),
-        image: gameImages[i].childNodes[0].nodeValue
-      }
-    }
-    console.log(games);
-  }
+  let games = parseApiData(apiData, "home");
 
   return (
     <div className="home">

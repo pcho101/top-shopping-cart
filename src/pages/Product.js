@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useHttp } from "../hooks/http";
+import parseApiData from "../helpers/parseApiData";
 
 const Product = (props) => {
   const { addToCart } = props;
@@ -7,10 +8,6 @@ const Product = (props) => {
   const gameEndPoint = "https://boardgamegeek.com/xmlapi2/thing?id=";
   const itemId = parseInt(params.productId, 10);
   const [productLoading, apiData] = useHttp(gameEndPoint + itemId, [params.productId]);
-  
-  const priceById = (id) => {
-    return Math.max(Math.round(Number(id) / 100), 1000) / 100;
-  }
 
   const currencyFormat = (price) => {
     return new Intl.NumberFormat('en-US', {
@@ -23,20 +20,8 @@ const Product = (props) => {
     return {__html: string};
   }
 
-  let game = null;
+  let game = parseApiData(apiData, "product", itemId);
   console.log('product re-renders');
-  
-  if (apiData) {
-    console.log(apiData);
-    game = {
-      id: apiData.getElementsByTagName("item")[0].getAttribute("id"),
-      name: apiData.getElementsByTagName("name")[0].getAttribute("value"),
-      image: apiData.getElementsByTagName("image")[0].childNodes[0].nodeValue,
-      thumb: apiData.getElementsByTagName("thumbnail")[0].childNodes[0].nodeValue,
-      desc: apiData.getElementsByTagName("description")[0].childNodes[0].nodeValue,
-      price: priceById(itemId)
-    };
-  }
 
   const productPage = (
     game

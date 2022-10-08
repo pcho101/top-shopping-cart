@@ -1,48 +1,20 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Nav from "./components/Nav";
-import Home from "./components/Home";
-import Shop from "./components/Shop";
+import Home from "./pages/Home";
+import Shop from "./pages/Shop";
 import Cart from "./components/Cart";
-import Product from "./components/Product";
+import Product from "./pages/Product";
 import { useState } from "react";
 import { useHttp } from "./hooks/http";
 import "./styles/App.css";
+import parseApiData from "./helpers/parseApiData";
 
 function App() {
   const [cart, setCart] = useState([]);
   const [cartActive, setCartActive] = useState(false);
   const [hotGamesLoading, apiData] = useHttp("https://boardgamegeek.com/xmlapi2/hot?boardgame", []);
 
-  const priceById = (id) => {
-    return Math.max(Math.round(Number(id) / 100), 1000) / 100;
-  }
-
-  let hotGames = [];
-
-  if (apiData) {
-    let hotGamesItems = apiData.getElementsByTagName("item");
-    let hotGamesNames = apiData.getElementsByTagName("name");
-    let hotGamesThumbs = apiData.getElementsByTagName("thumbnail");
-    hotGamesItems = Array.from(hotGamesItems);
-    hotGamesNames = Array.from(hotGamesNames);
-    hotGamesThumbs = Array.from(hotGamesThumbs);
-    const gameId = hotGamesItems.map(element => ({
-      id: element.id,
-      price: priceById(element.id)
-    }))
-    const gameName = hotGamesNames.map(element => ({
-      name: element.attributes[0].nodeValue
-    }))
-    const gameThumb = hotGamesThumbs.map(element => ({
-      thumb: element.attributes[0].nodeValue
-    }))
-    for (let i = 0; i < hotGamesNames.length; i++) {
-      hotGames.push(
-        { ...gameId[i], ...gameName[i], ...gameThumb[i] }
-      )
-    }
-    console.log(hotGames);
-  }
+  let hotGames = parseApiData(apiData, "app");
   
   const toggleCart = () => {
     setCartActive(!cartActive);
