@@ -97,6 +97,7 @@ const parseApiData = (apiData, type, args) => {
         console.log('product', game);
         return game;
       } else return null;
+    default:
   }
 }
 
