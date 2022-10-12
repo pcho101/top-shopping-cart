@@ -1,9 +1,15 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import Shop from "../Shop";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, MemoryRouter } from "react-router-dom";
 import '@testing-library/jest-dom';
 import userEvent from "@testing-library/user-event";
+import { useHttp } from "../../hooks/http";
+
+jest.mock('../../hooks/http', () => ({
+  __esModule: true,
+  useHttp: jest.fn()
+}))
 
 const mockHotGames = [
   {
@@ -16,6 +22,7 @@ const mockHotGames = [
 
 describe("Shop component", () => {
   it("renders heading", () => {
+    useHttp.mockReturnValue([false, null]);
     render(
       <BrowserRouter>
         <Shop />
@@ -25,6 +32,7 @@ describe("Shop component", () => {
   });
 
   it("renders filter input field", () => {
+    useHttp.mockReturnValue([false, null]);
     render(
       <BrowserRouter>
         <Shop />
@@ -34,6 +42,7 @@ describe("Shop component", () => {
   });
 
   it("input has correct values", async () => {
+    useHttp.mockReturnValue([false, null]);
     render(
       <BrowserRouter>
         <Shop />
@@ -48,6 +57,7 @@ describe("Shop component", () => {
   });
 
   it("renders details when hotgames prop specified", () => {
+    useHttp.mockReturnValue([false, null]);
     render(
       <BrowserRouter>
         <Shop hotGames={mockHotGames}/>
@@ -56,5 +66,28 @@ describe("Shop component", () => {
     expect(screen.getByRole("img")).toBeInTheDocument();
     expect(screen.getAllByRole("heading")[1].textContent).toMatch(/everdell/i);
     expect(screen.getAllByRole("heading")[2].textContent).toMatch(/33.24/i);
+  });
+
+  it("renders loading games if games are not loaded yet", () => {
+    useHttp.mockReturnValue([false, null]);
+    render(
+      <BrowserRouter>
+        <Shop
+          hotGames={mockHotGames}
+          hotGamesLoading={true}
+        />
+      </BrowserRouter>
+    );
+    expect(screen.getByRole("heading", { name: /loading games/i })).toBeInTheDocument();
+  });
+
+  it("renders loading search results when loading from api", () => {
+    useHttp.mockReturnValue([true, null]);
+    render(
+      <MemoryRouter initialEntries={["/shop?search=dune"]}>
+        <Shop />
+      </MemoryRouter>
+    );
+    expect(screen.getByRole("heading", { name: /loading search results/i })).toBeInTheDocument();
   });
 })
