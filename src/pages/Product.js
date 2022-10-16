@@ -15,7 +15,6 @@ const Product = (props) => {
   }
 
   let game = parseApiData(apiData, "product", itemId);
-  console.log('product re-renders');
 
   const productPage = game
     ? <div className="product-info">
@@ -26,7 +25,7 @@ const Product = (props) => {
         <p dangerouslySetInnerHTML={markup(game.desc)}></p>
       </div>
     : <div>
-        <h1>Product not found</h1>
+        <h1>Product Not found</h1>
       </div>
 
 

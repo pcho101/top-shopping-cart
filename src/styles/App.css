@@ -36,7 +36,8 @@ h1 {
   font-size: 24px;
   font-weight: bold;
   line-height: 48px;
-  text-transform: none;
+  text-transform: uppercase;
+  letter-spacing: 4px;
   color: #333333;
 }
 
@@ -74,6 +75,14 @@ button:hover {
   background-color: white;
 }
 
+
+.logo {
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  margin: 0px;
+  padding: 0px 16px;
+}
 
 nav {
   display: flex;
@@ -240,6 +249,7 @@ input[type=radio] {
 .searchedgames {
   display: flex;
   flex-direction: column;
+  padding: 1rem;
 }
 
 .searchedgamesitem {
@@ -252,9 +262,16 @@ input[type=radio] {
 }
 
 .searchresult {
-  margin: 1rem 0rem;
+  margin-bottom: 1rem;
 }
 
+main {
+  padding: 1rem;
+}
+
+main h1 {
+  text-align: center;
+}
 
 
 .cart {
@@ -277,6 +294,11 @@ input[type=radio] {
   justify-content: space-between;
   align-items: center;
   height: 3.5rem;
+}
+
+.cart-header h1 {
+  font-size: 20px;
+  letter-spacing: 1px;
 }
 
 .cart-main {
@@ -361,6 +383,7 @@ input[type=radio] {
   font-weight: 100;
   font-size: 18px;
   margin: 0px;
+  padding: 4px;
 }
 
 h5 span,
@@ -377,7 +400,7 @@ h6 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 
@@ -389,9 +412,19 @@ h6 {
   height: 60vh;
 }
 
+footer {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  background-color: #cfcfcf;
+  height: min-content;
+}
+
+
 @media only screen and (max-width: 767px) {
   .container {
     max-width: 24rem;
     max-height: 16rem;
   }
 }
+

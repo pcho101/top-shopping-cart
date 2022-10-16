@@ -10,7 +10,6 @@ const Search = () => {
   }
 
   const handleSubmit = (e) => {
-    console.log(searchValue);
     e.preventDefault();
     if (!searchValue) return;
     let params = { search: searchValue };

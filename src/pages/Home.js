@@ -13,7 +13,6 @@ const Home = (props) => {
     return shuffled.slice(0, num);
   }
 
-  console.log('render home');
   const gameIds = getMultipleRandom(hotGames, 3).map((item) => item.id).join(',');
 
   const [gameLoading, apiData] = useHttp(gameEndPoint + gameIds, [hotGames]);
@@ -28,7 +27,6 @@ const Home = (props) => {
     let interval = null;
     if (isActive) {
       interval = setInterval(() => {
-        console.log('radio inc', radioIndex);
         if (radioIndex === 2) setRadioIndex(0)
         else setRadioIndex(radioIndex => radioIndex + 1);
       }, 5000);

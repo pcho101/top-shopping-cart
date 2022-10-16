@@ -11,7 +11,7 @@ const Nav = (props) => {
 
   return (
     <nav>
-      <h3>Logo</h3>
+      <h1 className="logo">Logo</h1>
       <Search />
       <ul className="navitem">
         <Link to="/" className={location.pathname === '/' ? "active" : null}>

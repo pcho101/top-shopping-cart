@@ -27,7 +27,7 @@ const Results = (props) => {
           </div>
           ))
         : <div>
-            <h1>No results found with search term: {searchTerm}</h1>
+            <h2>No results found with search term: {searchTerm}</h2>
             <h2>Please try a different search term</h2>
           </div>
       }

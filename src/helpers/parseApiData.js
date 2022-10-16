@@ -7,7 +7,6 @@ const parseApiData = (apiData, type, args) => {
     case "app":
       if (apiData) {
         let hotGames = [];
-        console.log('api data', apiData)
         const numberOfItems = apiData.getElementsByTagName("item").length;
         const hotGamesItems = apiData.getElementsByTagName("item").length > 0
           ? apiData.getElementsByTagName("item")
@@ -26,14 +25,12 @@ const parseApiData = (apiData, type, args) => {
             price: priceById(hotGamesItems[i].getAttribute("id"))
           }
         }
-        console.log('hot games', hotGames);
         return hotGames;
       } else return [];
     case "search":
       if(apiData) {
         let searchedGames = [];
         let searchResults = apiData.getElementsByTagName("item").length;
-        console.log('api data', apiData)
         const itemLimit = Math.min(apiData.getElementsByTagName("item").length, 50);
         for (let i = 0; i < itemLimit; i++) {
           searchedGames[i] = {
@@ -43,13 +40,11 @@ const parseApiData = (apiData, type, args) => {
             price: priceById(apiData.getElementsByTagName("item")[i].getAttribute("id"))
           }
         }
-        console.log('searchedGames', searchedGames);
         return [ searchedGames, searchResults ];
       } else return [ [], 0 ];
     case "home":
       if(apiData) {
         let games = [];
-        console.log('api data', apiData)
         const numberOfItems = apiData.getElementsByTagName("item").length;
         const gameItems = apiData.getElementsByTagName("item").length > 0
           ? apiData.getElementsByTagName("item")
@@ -63,13 +58,11 @@ const parseApiData = (apiData, type, args) => {
             image: gameImages[i].childNodes[0].nodeValue
           }
         }
-        console.log('featured games', games);
         return games;
       } else return [];
     case "product":
       if (apiData) {
         let game = null;
-        console.log('api data', apiData)
         if(apiData.getElementsByTagName("item").length === 0) return null;
         const productId = apiData.getElementsByTagName("item").length > 0
           ? apiData.getElementsByTagName("item")[0].getAttribute("id")
@@ -94,7 +87,6 @@ const parseApiData = (apiData, type, args) => {
           desc: productDesc,
           price: priceById(args)
         };
-        console.log('product', game);
         return game;
       } else return null;
     default:

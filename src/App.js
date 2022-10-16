@@ -4,18 +4,22 @@ import Home from "./pages/Home";
 import Shop from "./pages/Shop";
 import Cart from "./components/Cart";
 import Product from "./pages/Product";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHttp } from "./hooks/http";
 import "./styles/App.css";
 import parseApiData from "./helpers/parseApiData";
+import Footer from "./components/Footer";
 
 function App() {
   const [cart, setCart] = useState([]);
   const [cartActive, setCartActive] = useState(false);
   const [hotGamesLoading, apiData] = useHttp("https://boardgamegeek.com/xmlapi2/hot?boardgame", []);
+  const [hotGames, setHotGames] = useState([]);
 
-  let hotGames = parseApiData(apiData, "app");
-  
+  useEffect(() => {
+    setHotGames(parseApiData(apiData, "app"));
+  }, [apiData])
+
   const toggleCart = () => {
     setCartActive(!cartActive);
   }
@@ -51,34 +55,42 @@ function App() {
   return (
     <BrowserRouter>
       <Nav clickHandler={toggleCart} cartItems={cart}/>
-      { cartActive
-      ? <Cart
-        clickHandler={toggleCart}
-        cartItems={cart}
-        removeFromCart={removeFromCart}
-        addToCart={addToCart}
-        decFromCart={decFromCart}
-        toggleCart={toggleCart}
-      />
-      : null }
+      {cartActive
+        ? <Cart
+          clickHandler={toggleCart}
+          cartItems={cart}
+          removeFromCart={removeFromCart}
+          addToCart={addToCart}
+          decFromCart={decFromCart}
+          toggleCart={toggleCart}
+        />
+        : null}
       <Routes>
         <Route path="/" element={<Home hotGames={hotGames}/>} />
-        <Route path="/shop" element={<Shop
-          addToCart={addToCart}
-          hotGames={hotGames}
-          hotGamesLoading={hotGamesLoading}/>}
-        />
-        <Route path="/product/:productId" element={<Product
-          addToCart={addToCart} />}
-        />
-        <Route path="*"
+        <Route
+          path="/shop"
           element={
-            <main style={{ padding: "1rem" }}>
-              <p>Page Not Found</p>
+            <Shop
+              addToCart={addToCart}
+              hotGames={hotGames}
+              hotGamesLoading={hotGamesLoading}
+            />
+          }
+        />
+        <Route
+          path="/product/:productId"
+          element={<Product addToCart={addToCart} />}
+        />
+        <Route
+          path="*"
+          element={
+            <main>
+              <h1>Page Not Found</h1>
             </main>
           }
         />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

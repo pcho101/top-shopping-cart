@@ -14,7 +14,6 @@ const Shop = (props) => {
   const [filterValue, setFilterValue] = useState('');
 
   let [searchedGames, searchResults] = parseApiData(apiData, "search");
-  console.log('shop re-renders')
 
   const gameList = searchParams.get("search")
     ? <Results
