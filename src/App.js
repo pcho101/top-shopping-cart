@@ -53,7 +53,7 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="top-shopping-cart">
       <Nav clickHandler={toggleCart} cartItems={cart}/>
       {cartActive
         ? <Cart
